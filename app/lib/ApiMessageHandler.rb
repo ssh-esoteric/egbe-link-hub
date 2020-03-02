@@ -64,6 +64,10 @@ class ApiMessageHandler
     if value == msg
       # We're the host; wait for the guest
       msg_pop ack
+      @redis.del syn
+      @redis.del ack
+      @redis.del "#@link_id/guest"
+      @redis.del "#@link_id/host"
     else
       msg_push ack, msg
     end
