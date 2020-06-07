@@ -1,0 +1,103 @@
+<%
+-%>
+<form id="new-link" method="POST" action="#">
+</form>
+
+<section class="section">
+
+  <h1 class="title is-4 is-pulled-left">Most recent links</h1>
+
+  <div class="dropdown is-hoverable is-pulled-right">
+    <div class="dropdown-trigger">
+      <button class="button" aria-haspopup="true" aria-controls="dropdown-menu2">
+        <span>New Link</span>
+        <span class="icon is-small">
+          <i class="fas fa-angle-down" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div>
+    <span class="clearfix"></span>
+
+    <div class="dropdown-menu" role="menu" style="left: auto; right: 0">
+      <div class="dropdown-content">
+        <div class="dropdown-item">
+          <label class="label">Name</label>
+          <input
+            class="input"
+            form="new-link"
+            name="name"
+            type="text"
+            placeholder="Name"
+            autocomplete="off"
+            required
+            >
+        </div>
+
+        <div class="dropdown-item">
+          <label class="label">Password (Optional)</label>
+          <input
+            class="input"
+            form="new-link"
+            name="password"
+            type="password"
+            placeholder="●●●●●●●●"
+            autocomplete="off"
+            >
+        </div>
+        <div class="dropdown-item">
+          <button class="button is-pulled-right" form="new-link" type="submit">Submit</button>
+          <span class="is-clearfix"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table is-bordered is-striped is-fullwidth">
+    <tr>
+      <th>ID</th>
+      <th style="width: 100%">Name</th>
+      <th></th>
+    </tr>
+  <% if @links.empty? -%>
+    <tr>
+      <td></td>
+      <td class="has-text-centered">&laquo; No Links available &ndash; try creating one! &raquo;</td>
+      <td></td>
+    </tr>
+  <% else -%>
+      <%   @links.each do |link| -%>
+        <tr>
+          <td><%= link.id %></td>
+          <td><%= link.name %></td>
+          <td style="white-space: nowrap">
+            <a href="/links/<%= link.id %>">Link</a>
+            <%     if link.protected? -%>
+              <span class="icon is-small">
+                <i class="fas fa-lock"></i>
+              </span>
+            <%     end -%>
+          </td>
+        </tr>
+      <%   end -%>
+    </table>
+  <% end -%>
+
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(e) {
+      document.querySelectorAll('.dropdown').forEach(function(node) {
+        node.classList.remove('is-active');
+        e.stopImmediatePropagation();
+      });
+    });
+
+    document.querySelectorAll('.dropdown').forEach(function(node) {
+      node.addEventListener('click', function(e) {
+        node.classList.add('is-active');
+        e.stopImmediatePropagation();
+      });
+    });
+  });
+</script>

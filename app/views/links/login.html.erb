@@ -1,0 +1,31 @@
+<section class="section">
+
+<p>
+  <a href="/links/">Back</a>
+</p>
+
+<form id="login" method="POST" action="#">
+  <input type="hidden" name="type" value="login"/>
+</form>
+
+<div class="field">
+  <p class="control">This link is protected by a password.  Please log in.</p>
+
+  <p class="control has-icons-left">
+    <input
+      class="input"
+      form="login"
+      name="password"
+      type="password"
+      placeholder="Password"
+    >
+    <span class="icon is-small is-left">
+      <i class="fas fa-lock"></i>
+    </span>
+
+    <button class="button is-pulled-right" form="login" type="submit">Submit</button>
+    <span class="is-clearfix"></span>
+  </p>
+</div>
+
+</section>

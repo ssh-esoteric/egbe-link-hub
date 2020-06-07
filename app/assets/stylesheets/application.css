@@ -13,3 +13,14 @@
  *= require_tree .
  *= require_self
  */
+
+header {
+  border-bottom: 1px solid rgb(54, 54, 54);
+}
+
+.user-select-all {
+  -moz-user-select: all;
+  -webkit-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
+}

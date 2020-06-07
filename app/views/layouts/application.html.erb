@@ -1,14 +1,51 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EgbeLinkHub</title>
+    <title>EGBE Link Hub</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css" integrity="sha256-qS+snwBgqr+iFVpBB58C9UCxKFhyL03YHpZfdNUhSEw=" crossorigin="anonymous">
+    <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+
+      <div class="container">
+        <div class="columns">
+          <div class="column is-two-thirds">
+            <h1 class="title">EGBE Link Hub</h1>
+          </div>
+
+          <div class="column">
+          </div>
+
+          <div class="column">
+            <div>
+              <i class="fab fa-github"></i>
+              <a href="https://github.com/ssh-esoteric/egbe" target="_blank">
+                EGBE
+              </a>
+            </div>
+            <div>
+              <i class="fab fa-github"></i>
+              <a href="https://github.com/ssh-esoteric/egbe-link-hub" target="_blank">
+                EGBE Link Hub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container section is-pulled-right">
+      <div class="">
+      </div>
+      </div>
+    </header>
+    <main class="container">
+<%= yield %>
+    </main>
+
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
   </body>
 </html>

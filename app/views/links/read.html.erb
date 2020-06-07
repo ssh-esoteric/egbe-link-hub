@@ -1,0 +1,23 @@
+<section class="section">
+
+<p>
+  <a href="/links/">Back</a>
+</p>
+
+<br>
+<h1 class="title is-5" style="margin-bottom: 0.5rem">Link #<%= @link.id %></h1>
+<table class="table is-bordered">
+  <tr>
+    <td>Name</td>
+    <td><%= @link.name %></td>
+  </tr>
+
+  <tr>
+    <td>API URI</td>
+    <td>
+      <code class="user-select-all"><%= "#{request.base_url}/links/#{@link.secret}/api" %></code>
+    </td>
+  </tr>
+</table>
+
+</section>

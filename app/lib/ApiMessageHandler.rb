@@ -6,14 +6,16 @@ class ApiMessageHandler
   def initialize(redis, link_id, role, req = nil)
     @redis = redis
     @link_id = link_id.to_s # TODO: Validate syntax for redis?
+    @req = req
+    @rsp = nil
+
+    role = role.to_sym
     case role
-    when 'guest', 'host', 'sync'
+    when :guest, :host, :sync
       @role = role
     else
       raise "Invalid role: #{role}"
     end
-    @req = req
-    @rsp = nil
   end
 
   def rsp
