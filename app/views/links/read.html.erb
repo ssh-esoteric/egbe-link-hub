@@ -1,4 +1,5 @@
 <section class="section">
+<div id="link" data-secret="<%= @link.secret %>"></div>
 
 <p>
   <a href="/links/">Back</a>
@@ -20,4 +21,75 @@
   </tr>
 </table>
 
+<h1 class="title is-5" style="margin-bottom: 0.5rem">Chat</h1>
+
+<form id="send-form" action="<%= "#{request.base_url}/links/#{@link.secret}/send_message" %>" method="POST">
+</form>
+<label for="send-name">Name:</label>
+<br>
+<input id="send-name" type="text"/>
+<br>
+<label for="send-text">Message:</label>
+<br>
+<textarea id="send-text"></textarea>
+<br>
+<button id="send-button" class="button" type="submit">Send</button>
+
+<hr>
+
+<div id="messages">
+  <div id="message-template" class="panel" style="display: none">
+    <div class="level">
+      <div class="level-left">
+        <p class="level-item name">&laquo; No Name &raquo;</p>
+        <p class="level-item message">&laquo; No Message &raquo;</p>
+      </div>
+      <div class="level-right">
+        <p class="level-item timestamp">&laquo; No Timestamp &raquo;</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 </section>
+
+<script>
+  // document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('turbolinks:load', function() {
+    let link = document.getElementById('link');
+    let form = document.getElementById('send-form');
+    let button = document.getElementById('send-button');
+    let name = document.getElementById('send-name');
+    let text = document.getElementById('send-text');
+    button.addEventListener('click', function(e) {
+
+      let nameValue = name.value.trim();
+      let textValue = text.value.trim();
+      if (!textValue) {
+        text.focus();
+        return false;
+      }
+
+      fetch(form.action, {
+        method: form.method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          secret: link.dataset.secret,
+          name: nameValue,
+          text: textValue,
+        }, null, 2),
+      }).then(function(rsp) {
+        if (!rsp.ok) {
+          let e = new Error('Failed to send message');
+          e.rsp = rsp;
+          throw e;
+        }
+
+        text.value = '';
+        text.focus();
+      });
+    });
+  });
+</script>

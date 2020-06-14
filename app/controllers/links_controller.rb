@@ -3,6 +3,21 @@
 class LinksController < ApplicationController
   protect_from_forgery with: :null_session
 
+  def send_message
+    link = Link.find_by secret: params[:secret]
+    name = params[:name].to_s.strip
+    text = params[:text].to_s.strip
+
+    msg = {
+      type: 'message',
+      name: name,
+      text: text,
+      timestamp: Time.now.strftime('%s').to_i,
+    }
+    LinkChannel.broadcast_to link, msg
+    render json: msg
+  end
+
   def index
     @links = Link.order(link_id: :desc).first(50)
   end

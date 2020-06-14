@@ -24,3 +24,10 @@ header {
   -ms-user-select: all;
   user-select: all;
 }
+
+.level-item {
+  padding: 4px 8px;;
+}
+.level-item.message {
+  white-space: pre;
+}
