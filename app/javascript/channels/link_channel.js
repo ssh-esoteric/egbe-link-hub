@@ -1,9 +1,11 @@
-import consumer from "./consumer"
+import { createConsumer } from "@rails/actioncable"
 
 document.addEventListener('turbolinks:load', function() {
   console.debug('turbolinks:load');
 
   let link = document.getElementById('link')
+
+  let consumer = createConsumer(`/links/${link.dataset.secret}/api`)
 
   consumer.subscriptions.create({
     channel: "LinkChannel",
