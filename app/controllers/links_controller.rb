@@ -4,17 +4,14 @@ class LinksController < ApplicationController
   protect_from_forgery with: :null_session
 
   def send_message
-    link = Link.find_by secret: params[:secret]
+    secret = params[:secret]
+    link = Link.find_by secret: secret
     name = params[:name].to_s.strip
     text = params[:text].to_s.strip
+    msg = LinkChannel.make_message(name, text)
 
-    msg = {
-      type: 'message',
-      name: name,
-      text: text,
-      timestamp: Time.now.strftime('%s').to_i,
-    }
-    LinkChannel.broadcast_to link, msg
+    ActionCable.server.broadcast "#{secret}/chat", msg
+
     render json: msg
   end
 
@@ -73,26 +70,34 @@ class LinksController < ApplicationController
     redis = Redis.new host: 'localhost'
 
     id = params[:id]
-    accept = request.headers[:accept]
-    role = case accept
-    when 'application/prs.egbe.msg-v0.host';  :host
-    when 'application/prs.egbe.msg-v0.guest'; :guest
-    when 'application/prs.egbe.msg-v0.sync';  :sync
-    else return redirect_to "/links/#{id}"
+
+    status = LinkStatus.new redis, id, wait: 3
+
+    return render json: status if request.get?
+
+    raise 'PATCH expected' unless request.patch?
+
+    if tmp = params[:host]
+      if status.host_id.zero? && tmp['id']
+        msg = LinkChannel.make_message 'System', 'Host registered with cURL'
+        ActionCable.server.broadcast "#{id}/chat", msg
+      end
+
+      status.update_host tmp
+    elsif tmp = params[:guest]
+      if status.guest_id.zero? && tmp['id']
+        msg = LinkChannel.make_message 'System', 'Guest registered with cURL'
+        ActionCable.server.broadcast "#{id}/chat", msg
+      end
+
+      status.update_guest tmp
+    else
+      raise 'Update must contain host or guest'
     end
 
-    # For performance, don't do this check on :host or :guest
-    if role == :sync
-      @link = Link.where(secret: id).first
+    status.commit
 
-      return render plain: 'e Link not found', status: 404 if !@link
-    end
-
-    req = request.get? ? nil : ApiMessage.parse(request.body.read.chomp)
-
-    handler = ApiMessageHandler.new redis, id, role, req
-
-    return render plain: handler.rsp.to_s
+    return render json: status
   ensure
     redis.close if redis
   end

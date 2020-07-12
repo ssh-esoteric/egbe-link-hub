@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   post 'links/:id/send_message', to: 'links#send_message'
 
-  match 'links/:id/api', to: 'links#api', via: ['GET', 'PUT']
+  match 'links/:id/api', to: 'links#api', via: ['GET', 'PATCH']
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

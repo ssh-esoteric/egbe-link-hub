@@ -10,6 +10,7 @@ document.addEventListener('turbolinks:load', function() {
   consumer.subscriptions.create({
     channel: "LinkChannel",
     secret: link.dataset.secret,
+    chat: true,
   }, {
     connected() {
       // Called when the subscription is ready for use on the server
