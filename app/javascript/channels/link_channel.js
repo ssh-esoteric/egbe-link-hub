@@ -3,25 +3,23 @@ import { createConsumer } from "@rails/actioncable"
 document.addEventListener('turbolinks:load', function() {
   console.debug('turbolinks:load');
 
-  let link = document.getElementById('link')
-
-  let consumer = createConsumer(`/links/${link.dataset.secret}/api`)
+  let api_url = document.getElementById('api-url');
+  let consumer = createConsumer(api_url.textContent);
 
   consumer.subscriptions.create({
     channel: "LinkChannel",
-    secret: link.dataset.secret,
     chat: true,
   }, {
     connected() {
       // Called when the subscription is ready for use on the server
 
-      console.debug('Link connected: ' + link.dataset.secret);
+      console.debug('Link connected');
     },
 
     disconnected() {
       // Called when the subscription has been terminated by the server
 
-      console.debug('Link disconnected: ' + link.dataset.secret);
+      console.debug('Link disconnected');
     },
 
     received(data) {

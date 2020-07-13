@@ -1,4 +1,6 @@
 class WebsocketRouter
+  REGEXP = %r{/links/(?<secret>[ps][0-9a-zA-Z_-]+)/api}
+
   def initialize(app)
     @app = app
   end
@@ -7,10 +9,15 @@ class WebsocketRouter
     uri = env['REQUEST_URI']
     upgrade = env['HTTP_UPGRADE']
 
-    if upgrade =~ /websocket/ && uri =~ %r{/links/(?<secret>[ps][0-9a-zA-Z_-]+)/api}
-      ActionCable.server.call env
-    else
-      @app.call env
+    match = REGEX.match uri
+    if match
+      env['egbe.websocket_router.secret'] = match[:secret]
+
+      if upgrade =~ /websocket/
+        return ActionCable.server.call env
+      end
     end
+
+    @app.call env
   end
 end

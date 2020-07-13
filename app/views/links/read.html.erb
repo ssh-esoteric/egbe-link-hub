@@ -1,5 +1,4 @@
 <section class="section">
-<div id="link" data-secret="<%= @link.secret %>"></div>
 
 <p>
   <a href="/links/">Back</a>
@@ -16,7 +15,7 @@
   <tr>
     <td>API URI</td>
     <td>
-      <code class="user-select-all"><%= "#{request.base_url}/links/#{@link.secret}/api" %></code>
+      <code id="api-url" class="user-select-all"><%= "#{request.base_url}/links/#{@link.secret}/api" %></code>
     </td>
   </tr>
 </table>
@@ -56,7 +55,6 @@
 <script>
   // document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('turbolinks:load', function() {
-    let link = document.getElementById('link');
     let form = document.getElementById('send-form');
     let button = document.getElementById('send-button');
     let name = document.getElementById('send-name');
@@ -76,7 +74,6 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          secret: link.dataset.secret,
           name: nameValue,
           text: textValue,
         }, null, 2),

@@ -13,10 +13,14 @@ class LinkChannel < ApplicationCable::Channel
   end
   def_delegator self, :make_message
 
+  def find_secret
+    @connection.env['egbe.websocket_router.secret']
+  end
+
   def subscribed
     redis = Redis.new host: 'localhost'
 
-    secret = params[:secret]
+    secret = find_secret
 
     if params[:chat]
       stream_from "#{secret}/chat"
@@ -68,7 +72,7 @@ class LinkChannel < ApplicationCable::Channel
   def receive(data)
     redis = Redis.new host: 'localhost'
 
-    secret = data['secret']
+    secret = find_secret
     status = LinkStatus.new redis, secret
 
     if tmp = data['host']

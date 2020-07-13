@@ -4,7 +4,7 @@ class LinksController < ApplicationController
   protect_from_forgery with: :null_session
 
   def send_message
-    secret = params[:secret]
+    secret = params[:id]
     link = Link.find_by secret: secret
     name = params[:name].to_s.strip
     text = params[:text].to_s.strip
