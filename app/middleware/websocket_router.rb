@@ -9,7 +9,7 @@ class WebsocketRouter
     uri = env['REQUEST_URI']
     upgrade = env['HTTP_UPGRADE']
 
-    match = REGEX.match uri
+    match = REGEXP.match uri
     if match
       env['egbe.websocket_router.secret'] = match[:secret]
 
